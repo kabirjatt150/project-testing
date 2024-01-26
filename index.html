@@ -77,6 +77,53 @@
             border-radius: 5px;
             font-size: 12px;
         }
+
+        /* Combined container for checkbox and button */
+        .biometric-container {
+            position: relative;
+            width: 300px;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #biometricCheckbox {
+            margin-right: 10px;
+        }
+        #biometricButton {
+            flex-grow: 1;
+            height: 40px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            overflow: hidden; /* Hide overflowing content */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 30px;
+        }
+        #biometricButton:hover {
+            background-color: #3e8e41;
+        }
+        #tickMark {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 30px;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            display: none;
+            transition: transform 0.3s ease-in-out;
+        }
+        #biometricCheckbox:checked + #biometricButton #tickMark {
+            display: block;
+            transform: translateY(-50%) rotate(45deg);
+        }
     </style>
 </head>
 <body>
@@ -88,9 +135,18 @@
         <label for="pwd">Password:</label>
         <input type="password" id="pwd" name="pwd">
         <br>
-        <button id="biometricButton" type="button" onclick="completeBiometricVerification()">Click here for biometric scan</button>
+        <!-- Combined container for checkbox and button -->
+        <div class="biometric-container">
+            <input type="checkbox" id="biometricCheckbox">
+            <!-- Button with visible tick mark -->
+            <label for="biometricCheckbox" id="biometricButton">
+                <div id="tickMark"></div>
+                Click here for biometric scan
+            </label>
+        </div>
         <br>
-        <input type="submit" value="LOG IN" onclick="validateLogin()">
+        <!-- Login button, enabled only if checkbox is checked -->
+        <input type="submit" value="LOG IN" onclick="validateLogin()" id="loginButton" disabled>
         <br>
         <a href="#">Forgot Password? skill issue</a>
         <br>
@@ -101,46 +157,10 @@
         <p>Independent project testing</p>
     </div>
 
-    <div class="hover-message" id="hoverMessage">Complete biometric verification first!</div>
-
     <script>
-        function completeBiometricVerification() {
-            // Placeholder for biometric verification logic
-            // Replace this with your actual biometric verification code
-            console.log('Biometric verification completed successfully!');
-        }
-
-        function validateLogin() {
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('pwd');
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-
-            // Allowed usernames and password
-            const allowedUsernames = ['kabir', 'gurtejvir', 'manya'];
-            const allowedPassword = '123';
-
-            if (allowedUsernames.includes(username) && password === allowedPassword) {
-                alert('Login successful!');
-            } else {
-                alert('Invalid username or password. Please try again.');
-                // Clear the password field on unsuccessful login
-                passwordInput.value = '';
-            }
-        }
-
-        const biometricButton = document.getElementById('biometricButton');
-        const hoverMessage = document.getElementById('hoverMessage');
-
-        biometricButton.addEventListener('mouseover', () => {
-            const rect = biometricButton.getBoundingClientRect();
-            hoverMessage.style.top = rect.top - hoverMessage.offsetHeight + 'px';
-            hoverMessage.style.left = rect.left + 'px';
-            hoverMessage.style.display = 'block';
-        });
-
-        biometricButton.addEventListener('mouseout', () => {
-            hoverMessage.style.display = 'none';
+        document.getElementById('biometricCheckbox').addEventListener('change', function() {
+            // Enable the login button if checkbox is checked
+            document.getElementById('loginButton').disabled = !this.checked;
         });
     </script>
 </body>
